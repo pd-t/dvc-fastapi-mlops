@@ -1,22 +1,23 @@
 # dvc-fastapi-mlops
 
-One of the main reasons for poor performance of AI models in the
-Use is the deviation of the data pipeline in the training and the 
-later application. So what is the mlops problem about?
+One of the main reasons for poor performance of AI models in production is 
+the deviation of the data pipeline in the training and the later 
+application. So what is the mlops problem about?
 
-When creating an AI model, a data scientist or ml engineering prepares the 
-data in order to achieve the best possible result. It is common practice 
-that the model is directly released for inference. The worst case, when 
-no information about the data preprocessing is passed on to a developer 
-which uses the model. This is one reason why models degenerate and 
+When creating an AI model, a data scientist or ml engineer prepares the
+data in order to achieve the best possible result. Bad practice is, when AI 
+models are directly released for inference without including the 
+preprocessing tasks. The worst practice is, when in addition to this no 
+information about the data preprocessing is passed to the developer who 
+connects the model to the application. This is one reason why models 
 disappoint in practice.
 
 Combining DvC and FastAPI is an option how this problem can be solved. The 
 basic idea is that the data go through exactly the same path of 
-preprocessing and through the model during training and later application. 
+preprocessing and through the model in training and inference. 
 This is achieved by loading the incoming inference data into a 
 dataframes, which reflects the dataframe of the loaded training data before 
-preprocessing. Strictly speaking, the creation of the RestAPI could be 
+preprocessing. In fact, the creation of the RestAPI could be 
 automated, based on the data frame structure at the beginning and end of 
 the data pipeline.
 
