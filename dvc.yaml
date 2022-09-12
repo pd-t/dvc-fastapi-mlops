@@ -1,0 +1,36 @@
+stages:
+  load:
+    cmd: PYTHONPATH="." python src/load.py
+    params:
+      - data.url
+    deps:
+      - src/load.py
+    outs:
+      - data/load.dir
+  prepare:
+    cmd: PYTHONPATH="." python src/prepare.py
+    deps:
+      - data/load.dir
+      - src/prepare.py
+    outs:
+      - data/prepare.dir
+  train:
+    cmd: PYTHONPATH="." python src/train.py
+    params:
+      - data.test_train_ratio
+      - data.random_state
+      - model.epochs
+      - model.early_stop
+    deps:
+      - data/prepare.dir
+      - src/train.py
+      - src/model
+    outs:
+      - data/train.dir
+  evaluate:
+    cmd: PYTHONPATH="." python src/evaluate.py
+    deps:
+      - data/train.dir
+      - src/evaluate.py
+    outs:
+      - data/evaluate.dir

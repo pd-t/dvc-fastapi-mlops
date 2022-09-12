@@ -1,0 +1,71 @@
+schema: '2.0'
+stages:
+  load:
+    cmd: PYTHONPATH="." python src/load.py
+    deps:
+    - path: src/load.py
+      md5: d43455684760113b9b12277e47d2869b
+      size: 588
+    params:
+      params.yaml:
+        data.url: https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv
+    outs:
+    - path: data/load.dir
+      md5: e87653eaaee6cf1e34e7b93a0b823e7f.dir
+      size: 1180953
+      nfiles: 2
+  prepare:
+    cmd: PYTHONPATH="." python src/prepare.py
+    deps:
+    - path: data/load.dir
+      md5: e87653eaaee6cf1e34e7b93a0b823e7f.dir
+      size: 1180953
+      nfiles: 2
+    - path: src/prepare.py
+      md5: be184e788b6f7ec6e17cf12db8792cd9
+      size: 580
+    outs:
+    - path: data/prepare.dir
+      md5: abfcf2a813416b124622fef3c4f183da.dir
+      size: 1137064
+      nfiles: 1
+  train:
+    cmd: PYTHONPATH="." python src/train.py
+    deps:
+    - path: data/prepare.dir
+      md5: abfcf2a813416b124622fef3c4f183da.dir
+      size: 1137064
+      nfiles: 1
+    - path: src/model
+      md5: 6d6f2c3af3389a32d72265637207e397.dir
+      size: 12486
+      nfiles: 12
+    - path: src/train.py
+      md5: fa8a8ff7f324346bed6d562722db0609
+      size: 1319
+    params:
+      params.yaml:
+        data.random_state: 42
+        data.test_train_ratio: 0.33
+        model.early_stop: 3
+        model.epochs: 200
+    outs:
+    - path: data/train.dir
+      md5: f2481ecf88d93f96de23de5fc3792be5.dir
+      size: 1105713
+      nfiles: 6
+  evaluate:
+    cmd: PYTHONPATH="." python src/evaluate.py
+    deps:
+    - path: data/train.dir
+      md5: f2481ecf88d93f96de23de5fc3792be5.dir
+      size: 1105713
+      nfiles: 6
+    - path: src/evaluate.py
+      md5: bbb61a78987bebdf7b6d266b55dbb511
+      size: 1094
+    outs:
+    - path: data/evaluate.dir
+      md5: df3f319d7c425f0d3bb876dd622e0c28.dir
+      size: 12209
+      nfiles: 1
